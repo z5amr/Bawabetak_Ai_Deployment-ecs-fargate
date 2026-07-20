@@ -1,7 +1,7 @@
 """Basic smoke tests for the face recognition API."""
 from fastapi.testclient import TestClient
 
-from src.main import app
+from src.core.app import app
 
 client = TestClient(app)
 
