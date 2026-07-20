@@ -63,13 +63,6 @@ models/**/*.onnx
 
 create_structure.py
 
-data
-models
-notebooks
-src
-tests
-Dockerfile
+
 guide.md
 README.md
-requirements.txt
-.env.example
