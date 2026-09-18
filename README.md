@@ -14,14 +14,36 @@ The following diagram illustrates the end-to-end workflow from code repository p
 The automated GitHub Actions workflow successfully authenticates with AWS, builds the container image, and pushes it to Amazon ECR:
 
 ![GitHub Actions Success Pipeline](infra/actions-success.png)
-*(Save your pipeline screenshot into your `infra/` or `assets/` folder as `actions-success.png`)*
 
 ## 🔌 API Documentation (Swagger UI)
 
 The deployed ECS Fargate container exposes an interactive FastAPI documentation interface at `/docs`, featuring live endpoints for face detection and embedding generation[cite: 9]:
 
 ![Face Recognition API Swagger UI](infra/api-docs.png)
-*(Save this screenshot into your `infra/` folder as `api-docs.png`)*
+
+## 🧪 API Testing & Verification
+
+You can test the face detection endpoint directly from the terminal using `curl`:
+
+\`\`\`bash
+curl -X POST "http://98.92.196.70:7860/face-recognition/detect-faces" \\
+  -H "accept: application/json" \\
+  -H "Content-Type: multipart/form-data" \\
+  -F "image=@test.jpg"
+\`\`\`
+
+**Expected Response:**
+\`\`\`json
+{"face_count":1}
+\`\`\`
+
+
+## 🧪 Interactive API Testing (Swagger UI)
+
+You can also test endpoints interactively directly within the browser using the Swagger UI interface (`/docs`), which validates form inputs (`image=@test.jpg`) and displays live server responses[cite: 6]:
+
+![Swagger UI Execution & Response](infra/swagger-test-success.png)
+
 
 * **Container Registry:** Images are built, tagged, and pushed securely to **Amazon ECR** (`bawabetak-ecs`)[cite: 5].
 * **Compute Environment:** Runs serverless container tasks on **AWS Fargate** inside an **ECS Cluster** (`bawabetak-ecs-clusterruns`)[cite: 5].
