@@ -26,7 +26,7 @@ The deployed ECS Fargate container exposes an interactive FastAPI documentation 
 You can test the face detection endpoint directly from the terminal using `curl`:
 
 \`\`\`bash
-curl -X POST "http://98.92.196.70:7860/face-recognition/detect-faces" \\
+curl -X POST "[http://98.92.196.70:7860/face-recognition/detect-faces](http://98.92.196.70:7860/docs#/Face%20Recognition)" \\
   -H "accept: application/json" \\
   -H "Content-Type: multipart/form-data" \\
   -F "image=@test.jpg"
