@@ -9,8 +9,13 @@ The following diagram illustrates the end-to-end workflow from code repository p
 ![Architecture Diagram](infra/Bawabetak_Ai.drawio.png)
 
 ## 🚀 Infrastructure & Workflow Overview
+## 🟢 CI/CD Pipeline Status
 
-* **CI/CD Pipeline:** Powered by **GitHub Actions** (`.github/workflows/deploy.yml`), triggered automatically on a `push` to the `main` branch.
+The automated GitHub Actions workflow successfully authenticates with AWS, builds the container image, and pushes it to Amazon ECR:
+
+![GitHub Actions Success Pipeline](infra/actions-success.png)
+*(Save your pipeline screenshot into your `infra/` or `assets/` folder as `actions-success.png`)*
+
 * **Container Registry:** Images are built, tagged, and pushed securely to **Amazon ECR** (`bawabetak-ecs`)[cite: 5].
 * **Compute Environment:** Runs serverless container tasks on **AWS Fargate** inside an **ECS Cluster** (`bawabetak-ecs-clusterruns`)[cite: 5].
 * **Networking & Security:** 
