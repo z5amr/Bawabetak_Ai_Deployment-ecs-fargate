@@ -26,7 +26,7 @@ The deployed ECS Fargate container exposes an interactive FastAPI documentation 
 You can test the face detection endpoint directly from the terminal using `curl`:
 
 \`\`\`bash
-curl -X POST "[http://98.92.196.70:7860/face-recognition/detect-faces](http://98.92.196.70:7860/docs#/Face%20Recognition)" \\
+curl -X POST "http://98.92.196.70:7860/docs#/Face%20Recognition" \\
   -H "accept: application/json" \\
   -H "Content-Type: multipart/form-data" \\
   -F "image=@test.jpg"
@@ -43,6 +43,7 @@ curl -X POST "[http://98.92.196.70:7860/face-recognition/detect-faces](http://98
 You can also test endpoints interactively directly within the browser using the Swagger UI interface (`/docs`), which validates form inputs (`image=@test.jpg`) and displays live server responses[cite: 6]:
 
 ![Swagger UI Execution & Response](infra/swagger-test-success.png)
+
 
 
 * **Container Registry:** Images are built, tagged, and pushed securely to **Amazon ECR** (`bawabetak-ecs`)[cite: 5].
