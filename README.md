@@ -16,6 +16,13 @@ The automated GitHub Actions workflow successfully authenticates with AWS, build
 ![GitHub Actions Success Pipeline](infra/actions-success.png)
 *(Save your pipeline screenshot into your `infra/` or `assets/` folder as `actions-success.png`)*
 
+## 🔌 API Documentation (Swagger UI)
+
+The deployed ECS Fargate container exposes an interactive FastAPI documentation interface at `/docs`, featuring live endpoints for face detection and embedding generation[cite: 9]:
+
+![Face Recognition API Swagger UI](infra/api-docs.png)
+*(Save this screenshot into your `infra/` folder as `api-docs.png`)*
+
 * **Container Registry:** Images are built, tagged, and pushed securely to **Amazon ECR** (`bawabetak-ecs`)[cite: 5].
 * **Compute Environment:** Runs serverless container tasks on **AWS Fargate** inside an **ECS Cluster** (`bawabetak-ecs-clusterruns`)[cite: 5].
 * **Networking & Security:** 
