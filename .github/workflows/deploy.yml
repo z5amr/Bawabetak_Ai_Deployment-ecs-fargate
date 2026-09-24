@@ -1,32 +1,15 @@
-name: Destroy Infrastructure
+name: Deploy to Amazon ECR
 
 on:
-  workflow_dispatch:
-    inputs:
-      confirm_destroy:
-        description: 'Type "DESTROY" to confirm teardown'
-        required: true
-        default: 'NO'
+  push:
+    branches: [ main ]
 
 jobs:
-  destroy:
-    name: Terraform Destroy
+  build-and-push:
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: infra
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Validate Manual Confirmation
-        run: |
-          if [ "${{ github.event.inputs.confirm_destroy }}" != "DESTROY" ]; then
-            echo "Destruction cancelled: Safety check failed."
-            exit 1
-          fi
+        uses: actions/checkout@v6
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -35,11 +18,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: bawabetak-ecs
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f infra/Dockerfile .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
