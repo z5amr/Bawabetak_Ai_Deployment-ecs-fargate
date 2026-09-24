@@ -1,26 +1,42 @@
-name: Destroy Infrastructure
+name: Infrastructure Lifecycle (Terraform)
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/**'
+      - '!infra/README.md'
+      - '!infra/Dockerfile'
   workflow_dispatch:
     inputs:
-      confirm_destroy:
-        description: 'Type "DESTROY" to confirm teardown'
+      action:
+        description: 'Select Infrastructure Action'
         required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
+      confirm_destroy:
+        description: 'Type "DESTROY" if selecting destroy action'
+        required: false
         default: 'NO'
 
 jobs:
-  destroy:
-    name: Terraform Destroy
+  terraform:
+    name: Terraform Execution
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: infra
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Validate Manual Confirmation
+      - name: Validate Destroy Confirmation
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy' }}
         run: |
           if [ "${{ github.event.inputs.confirm_destroy }}" != "DESTROY" ]; then
             echo "Destruction cancelled: Safety check failed."
@@ -40,5 +56,10 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Terraform Apply
+        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply') }}
+        run: terraform apply -auto-approve
+
       - name: Terraform Destroy
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
